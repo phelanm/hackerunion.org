@@ -7,12 +7,17 @@ block title
 
 block nav
   ul.right
-    li.animate.active
-      a(href='/#{current_chapter.slug}') home
+    li(id="notifDrop").animate.active
+      a(href='/#{current_chapter.slug}')#notifHref 
+        | home
+        img(src="/static/images/notif_circle_1.png")#numNotifs
+      div(style="position:absolute;background-color:white;z-index:40;border:1px lightgrey solid;")
+        ul(id="navdropshow",style='height:200px;')
     li.animate
       a(href='/#{current_chapter.slug}/members') members
     li.animate
       a(href='/#{current_chapter.slug}/projects/') projects
+    li.animate
     - if is_insider
       li.animate
         a(href='/accounts/logout') logout

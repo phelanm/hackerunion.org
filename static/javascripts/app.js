@@ -1304,6 +1304,54 @@ function isValidEmailAddress(emailAddress) {
     });
   }
 
+  /******** Nav Bar Notifications ***********/
+  $.ajax({
+      type: "GET",
+      url: cleanURL('/notifications/get'),
+      success: function(data) {
+        var notifBox = $('#navdropshow');
+        var notifs = data['value']['notifs'];
+        var chapter = data['value']['chapter'];
+        for(var i=0;i < notifs.length;i++) {
+          var noti = notifs[i];
+          var bull_url = cleanURL("/"+chapter+'/posts/'+noti['bulletin_id']);
+          bull_url = encodeURIComponent(bull_url);
+          var redir_url = "url="+bull_url+"&notif_id="+noti['notif_id'];
+          var newNotiStr = '<li class="notifli" style="text-align:left;"><a href="/notifications/read?'+redir_url+'">' +noti['bulletin_title'];
+          if('comment_str' in noti) {
+            newNotiStr += ' <span class="notifcomment">'+noti['comment_str']+'</span></a></li>';
+          }
+
+          var newNoti = $(newNotiStr);
+          notifBox.append(newNoti);
+        }
+
+        if(notifs.length == 1 ) {
+          $('#numNotifs').css('display','inline-block');
+          $('#numNotifs').attr('src','/static/images/notif_circle_1.png');
+        } else if( notifs.length == 2) {
+          $('#numNotifs').css('display','inline-block');
+          $('#numNotifs').attr('src','/static/images/notif_circle_2.png');
+        } else if( notifs.length == 3) {
+          $('#numNotifs').css('display','inline-block');
+          $('#numNotifs').attr('src','/static/images/notif_circle_3.png');
+        } else if( notifs.length > 3) {
+          $('#numNotifs').attr('src','/static/images/notif_circle_3plus.png');
+          $('#numNotifs').css('display','inline-block');
+        }
+        if(notifs.length > 0) {
+          $('#notifDrop').on('mouseover',function() {
+            $('#navdropshow').css('display','block');
+          });
+          $('#notifDrop').on('mouseout',function() {
+            $('#navdropshow').css('display','none');
+          });
+        }
+      },
+      fail: function(e) { try {console.log(e);} catch(err){} }
+  });
+
+  /******** END Nav Bar Notifications ***********/
 });
 
 })(jQuery, this);
