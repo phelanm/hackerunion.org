@@ -1,0 +1,45 @@
+### python django hackerunion petri
+ mjp@genua:~/src/py$ git clone https://github.com/hackerunion/hackerunion.org
+ mjp@genua:~/src/py/hackerunion.org$ sudo gem install sass
+ mjp@genua:~/src/py/hackerunion.org$ sudo apt-get install sqlite sqlite-doc
+ mjp@genua:~/src/py/hackerunion.org$ virtualenv env
+ mjp@genua:~/src/py/hackerunion.org$ pip install -r var/etc/requirements.txt
+  ...
+  Downloading/unpacking MySQL-python==1.2.4b5 (from -r var/etc/requirements.txt (line 3))
+   Downloading MySQL-python-1.2.4b5.tar.gz (82Kb): 82Kb downloaded
+   Running setup.py egg_info for package MySQL-python
+     The required version of distribute (>=0.6.28) is not available,
+     and can't be installed while this script is running. Please
+     install a more recent version first, using
+     'easy_install -U distribute'.
+  ...
+ mjp@genua:~/src/py/hackerunion.org$ sudo easy_install -U distribute
+ mjp@genua:~/src/py/hackerunion.org$ pip install -r var/etc/requirements.txt
+  ...
+  Downloading/unpacking MySQL-python==1.2.4b5 (from -r var/etc/requirements.txt (line 3))
+   Running setup.py egg_info for package MySQL-python
+     sh: 1: mysql_config: not found
+     Traceback (most recent call last):
+       File "<string>", line 14, in <module>
+       File "/home/mjp/src/py/hackerunion.org/build/MySQL-python/setup.py", line 18, in <module>
+         metadata, options = get_config()
+       File "setup_posix.py", line 43, in get_config
+         libs = mysql_config("libs_r")
+       File "setup_posix.py", line 25, in mysql_config
+         raise EnvironmentError("%s not found" % (mysql_config.path,))
+     EnvironmentError: mysql_config not found
+     Complete output from command python setup.py egg_info:
+     sh: 1: mysql_config: not found
+  ...
+ mjp@genua:~/src/py/hackerunion.org$ locate mysql_config
+ mjp@genua:~/src/py/hackerunion.org$ apt-cache search mysql_config
+ mjp@genua:~/src/py/hackerunion.org$ apt-file search mysql_config
+  libmysqlclient-dev: /usr/bin/mysql_config
+  ...
+ mjp@genua:~/src/py/hackerunion.org$ sudo apt-get install libmysqlclient-dev
+ mjp@genua:~/src/py/hackerunion.org$ sudo pip install -r var/etc/requirements.txt
+ mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True ./manage.py syncdb --noinput
+  Creating tables ...
+ mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True python manage.py runserver
+ mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True ./manage.py celeryd -v 2 -B -E -l INFO &
+ mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True python manage.py runserver
