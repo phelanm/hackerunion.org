@@ -1,4 +1,4 @@
-### python django hackerunion petri
+### run locally
  mjp@genua:~/src/py$ git clone https://github.com/hackerunion/hackerunion.org
  mjp@genua:~/src/py/hackerunion.org$ sudo gem install sass
  mjp@genua:~/src/py/hackerunion.org$ sudo apt-get install sqlite sqlite-doc
@@ -43,3 +43,116 @@
  mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True python manage.py runserver
  mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True ./manage.py celeryd -v 2 -B -E -l INFO &
  mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True python manage.py runserver
+
+
+### update fork with src changes, follow: http://bradlyfeeley.com/2008/09/03/update-a-github-fork-from-the-original-repo/
+ mjp@genua:~/src/py$ git clone https://github.com/phelanm/hackerunion.org.git
+ mjp@genua:~/src/py/hackerunion.org$ git remote add --track master hu2 https://github.com/hackerunion/hackerunion.org.git
+  mjp@genua:~/src/py/hackerunion.org$ git remote
+   ...
+   hu2
+   ...
+  mjp@genua:~/src/py/hackerunion.org$ git fetch hu2
+  mjp@genua:~/src/py/hackerunion.org$ git merge hu2/master
+  mjp@genua:~/src/py/hackerunion.org$ git commit -m "merge with current hackerunion.org"
+   [master 58f40d5] merge with current hackerunion.org
+  mjp@genua:~/src/py/hackerunion.org$ git status
+   # On branch master
+   # Your branch is ahead of 'origin/master' by 8 commits.
+  mjp@genua:~/src/py/hackerunion.org$ git log |cat
+   commit 58f40d5aa8622e6757bf4efbf77c26d222e11bfe
+   Merge: 20b4a74 c5ac289
+   Author: mark phelan <phelanm@gmail.com>
+   Date:   Wed Apr 24 17:59:35 2013 -0400
+   
+       merge with current hackerunion.org
+   
+   commit 20b4a74dfc9f783b810fa85586a9b18d0cc8d2bc
+   Author: mark phelan <phelanm@gmail.com>
+   Date:   Wed Apr 24 17:10:12 2013 -0400
+   
+       debian trials and tribulations
+   
+   commit c5ac28991bbe63ba9c374ee606c03f51f4b8741d
+   Merge: f3dbf29 400324e
+   Author: brandondiamond <brandon.t.diamond@gmail.com>
+   Date:   Thu Apr 18 13:26:39 2013 -0700
+   
+       Merge pull request #42 from mathisonian/master
+       
+       code cleanup and error handling for notifications
+   
+   commit 400324e69cd68d6575f170e1567269a7eff3577f
+   Author: Matthew Conlen <mc@mathisonian.com>
+   Date:   Thu Apr 18 16:20:32 2013 -0400
+   
+       cleanup notification code
+   
+   commit f3dbf298617fe16787ad102d9a517588df8af86d
+   ...
+  mjp@genua:~/src/py/hackerunion.org$ git config branch.master.remote hu2
+  mjp@genua:~/src/py/hackerunion.org$ git config branch.master.merge refs/heads/master
+  mjp@genua:~/src/py/hackerunion.org$ git status
+   # On branch master
+   # Your branch is ahead of 'hu2/master' by 2 commits.
+   ...
+  mjp@genua:~/src/py/hackerunion.org$ git rev-parse origin/master
+   20b4a74dfc9f783b810fa85586a9b18d0cc8d2bc
+  mjp@genua:~/src/py/hackerunion.org$ git show 20b4a74dfc9f783b810fa85586a9b18d0cc8d2bc |cat
+   commit 20b4a74dfc9f783b810fa85586a9b18d0cc8d2bc
+   Author: mark phelan <phelanm@gmail.com>
+   Date:   Wed Apr 24 17:10:12 2013 -0400
+   
+       debian trials and tribulations
+   
+   diff --git a/README.debian b/README.debian
+   new file mode 100644
+   index 0000000..047fd53
+   --- /dev/null
+   +++ b/README.debian
+   @@ -0,0 +1,45 @@
+   +### python django hackerunion petri
+   + mjp@genua:~/src/py$ git clone https://github.com/hackerunion/hackerunion.org
+   + mjp@genua:~/src/py/hackerunion.org$ sudo gem install sass
+   + mjp@genua:~/src/py/hackerunion.org$ sudo apt-get install sqlite sqlite-doc
+   + mjp@genua:~/src/py/hackerunion.org$ virtualenv env
+   + mjp@genua:~/src/py/hackerunion.org$ pip install -r var/etc/requirements.txt
+   +  ...
+   +  Downloading/unpacking MySQL-python==1.2.4b5 (from -r var/etc/requirements.txt (line 3))
+   +   Downloading MySQL-python-1.2.4b5.tar.gz (82Kb): 82Kb downloaded
+   +   Running setup.py egg_info for package MySQL-python
+   +     The required version of distribute (>=0.6.28) is not available,
+   +     and can't be installed while this script is running. Please
+   +     install a more recent version first, using
+   +     'easy_install -U distribute'.
+   +  ...
+   + mjp@genua:~/src/py/hackerunion.org$ sudo easy_install -U distribute
+   + mjp@genua:~/src/py/hackerunion.org$ pip install -r var/etc/requirements.txt
+   +  ...
+   +  Downloading/unpacking MySQL-python==1.2.4b5 (from -r var/etc/requirements.txt (line 3))
+   +   Running setup.py egg_info for package MySQL-python
+   +     sh: 1: mysql_config: not found
+   +     Traceback (most recent call last):
+   +       File "<string>", line 14, in <module>
+   +       File "/home/mjp/src/py/hackerunion.org/build/MySQL-python/setup.py", line 18, in <module>
+   +         metadata, options = get_config()
+   +       File "setup_posix.py", line 43, in get_config
+   +         libs = mysql_config("libs_r")
+   +       File "setup_posix.py", line 25, in mysql_config
+   +         raise EnvironmentError("%s not found" % (mysql_config.path,))
+   +     EnvironmentError: mysql_config not found
+   +     Complete output from command python setup.py egg_info:
+   +     sh: 1: mysql_config: not found
+   +  ...
+   + mjp@genua:~/src/py/hackerunion.org$ locate mysql_config
+   + mjp@genua:~/src/py/hackerunion.org$ apt-cache search mysql_config
+   + mjp@genua:~/src/py/hackerunion.org$ apt-file search mysql_config
+   +  libmysqlclient-dev: /usr/bin/mysql_config
+   +  ...
+   + mjp@genua:~/src/py/hackerunion.org$ sudo apt-get install libmysqlclient-dev
+   + mjp@genua:~/src/py/hackerunion.org$ sudo pip install -r var/etc/requirements.txt
+   + mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True ./manage.py syncdb --noinput
+   +  Creating tables ...
+   + mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True python manage.py runserver
+   + mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True ./manage.py celeryd -v 2 -B -E -l INFO &
+   + mjp@genua:~/src/py/hackerunion.org$ DJANGO_LOCAL=True python manage.py runserver
